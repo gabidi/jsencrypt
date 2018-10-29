@@ -7,7 +7,10 @@ import { RSAKey } from "../lib/jsbn/rsa";
  * @constructor
  */
 export declare class JSEncryptRSAKey extends RSAKey {
-    constructor(key?: string);
+    constructor({ key, secureRandom }: {
+        key?: string;
+        secureRandom?: any;
+    });
     /**
      * Method to parse a pem encoded string containing both a public or private key.
      * The method will translate the pem encoded string in a der encoded string and

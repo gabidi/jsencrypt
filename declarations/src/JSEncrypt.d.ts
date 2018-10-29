@@ -1,8 +1,10 @@
 import { JSEncryptRSAKey } from "./JSEncryptRSAKey";
+import { SecureRandom } from "../lib/jsbn/rng";
 export interface IJSEncryptOptions {
     default_key_size?: string;
     default_public_exponent?: string;
     log?: boolean;
+    secureRandom?: SecureRandom;
 }
 /**
  *
@@ -13,7 +15,8 @@ export interface IJSEncryptOptions {
  * - log                     {boolean} default: false whether log warn/error or not
  * @constructor
  */
-export declare class JSEncrypt {
+export default class JSEncrypt {
+    private secureRandom;
     constructor(options: IJSEncryptOptions);
     private default_key_size;
     private default_public_exponent;
@@ -58,6 +61,24 @@ export declare class JSEncrypt {
      * @public
      */
     encrypt(str: string): string | false;
+    /**
+     * Proxy method for RSAKey object's sign.
+     * @param {string} str the string to sign
+     * @param {function} digestMethod hash method
+     * @param {string} digestName the name of the hash algorithm
+     * @return {string} the signature encoded in base64
+     * @public
+     */
+    sign(str: string, digestMethod: (str: string) => string, digestName: string): string | false;
+    /**
+     * Proxy method for RSAKey object's verify.
+     * @param {string} str the string to verify
+     * @param {string} signature the signature encoded in base64 to compare the string to
+     * @param {function} digestMethod hash method
+     * @return {boolean} whether the data and signature match
+     * @public
+     */
+    verify(str: string, signature: string, digestMethod: (str: string) => string): boolean;
     /**
      * Getter for the current JSEncryptRSAKey object. If it doesn't exists a new object
      * will be created and returned
